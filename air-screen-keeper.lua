@@ -47,29 +47,9 @@ local echo = Spring.Echo
 
 local units = {} -- player's units
 local airscreen = {}
-local armSpyUDId = UnitDefNames["armspy"].id
-local coreSpyUDId = UnitDefNames["corspy"].id
-local targets = {}
-local spyTimeToBlast = {}
 local lastMarkTime = 0
 local MARK_DELAY = 3
 
-
---[[
-function widget:DrawWorldPreUnit()
-	glLineWidth(3.0)
-	glDepthTest(true)
-	glColor(1, 0, 0, .2)
-	for id, v in pairs(units) do
-		local posx,posy,posz = Spring.GetUnitPosition(id)
-		gl.Color(0.5, 0.5, 0.5, 0.5);
-		gl.DrawGroundCircle(posx, posy, posz, v, 25)
-	end
-
-	glDepthTest(false)
-end
---]]
---
 
 local function UnitHasPatrolOrder(unitID)
 	local queue=spGetCommandQueue(unitID,2)
@@ -105,18 +85,6 @@ local function dispatchUnit(unitID, unitDefID)
 	if udef.isAirUnit then
 		units[unitID] = true
 	end
-
-	--[[
-	--local ud = UnitDefs[unitDefID]
-	if unitDefID == armSpyUDId or unitDefID == coreSpyUDId then
-		local udef = UnitDefs[unitDefID]
-		local selfdBlastId = WeaponDefNames[string.lower(udef["selfDExplosion"])].id
-		local selfdBlastRadius = WeaponDefs[selfdBlastId]["damageAreaOfEffect"]
-		units[unitID] = selfdBlastRadius
-		spyTimeToBlast[unitID] = 0
-		--echo ("spy detected "..selfdBlastRadius)
-	end
-	--]]
 end
 
 function updateAirScreenUnits()
